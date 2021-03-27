@@ -65,8 +65,8 @@ Check that the file has correct IDR I-frames (for fps of 25 and GOP size of 2 se
 ffprobe output.mp4 -select_streams v -show_frames -of csv -show_entries frame=coded_picture_number,key_frame,pict_type
 ```
 
-# Create a 10s preview strip of 1s intervals
-Make sure input file has constant GOP SIZE. If GOP_SIZE=2s make sure the intervals are a multiple of 2:
+# Create a preview strip of 1s intervals
+Make sure input file has constant GOP SIZE. If GOP_SIZE=2s make sure the intervals are a multiple of 2. Expand `...` to add more/less seconds or increase interval duration. You need to calculate actual values beforehand, based on video duration and required spread:
 ```bash
 ffmpeg -i input.mp4 -an -codec:v libx264 -minrate 300k -maxrate 400k -bufsize 500k -vf scale=352:240,select='between(t\,18\,19)+between(t\,34\,35)+...',setpts=N/FRAME_RATE/TB -t 10 output.mp4
 ```
