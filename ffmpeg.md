@@ -71,6 +71,12 @@ Make sure input file has constant GOP SIZE. If GOP_SIZE=2s make sure the interva
 ffmpeg -i input.mp4 -an -codec:v libx264 -minrate 300k -maxrate 400k -bufsize 500k -vf scale=352:240,select='between(t\,18\,19)+between(t\,34\,35)+...',setpts=N/FRAME_RATE/TB -t 10 output.mp4
 ```
 
+# Create a preview strip as above but including audio
+Audio frames also need to be specified using the same intervals:
+```bash
+ffmpeg -i input.MP4 -c:a aac -codec:v libx264 -vf scale=352:240,select='between(t\,18\,19)+between(t\,34\,35)+...',setpts=N/FRAME_RATE/TB -af "aselect='between(t\,18\,19)+between(t\,34\,35)+...',asetpts=N/FRAME_RATE/TB" output.mp4
+```
+
 # Sync audio to timestamps
 Sync issues may occur on certain platforms when concatenating videos with ffmpeg. Use this during concatenation, or on the output file, to sync to timestamps. Setting async to 1 is the most constricting option and will yield the best results for concat sync issues:
 ```bash
